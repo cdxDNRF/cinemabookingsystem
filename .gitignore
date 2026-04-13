@@ -1,0 +1,12 @@
+.DS_Store
+Thumbs.db
+
+node_modules/
+dist/
+.idea/
+.vscode/
+
+cinema-backend/src/main/resources/application-local.yml
+.env
+.env.*
+

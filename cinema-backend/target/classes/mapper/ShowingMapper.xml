@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xd.cinema.module.showing.mapper.ShowingMapper">
+
+  <select id="findById" resultType="com.xd.cinema.module.showing.entity.Showing">
+    select * from t_showing where id=#{id}
+  </select>
+
+  <select id="listAdmin" resultType="com.xd.cinema.module.showing.entity.Showing">
+    select *
+    from t_showing
+    <where>
+      <if test="auditStatus != null">
+        and audit_status=#{auditStatus}
+      </if>
+      <if test="cinemaId != null">
+        and cinema_id=#{cinemaId}
+      </if>
+      <if test="movieId != null">
+        and movie_id=#{movieId}
+      </if>
+    </where>
+    order by id desc
+  </select>
+
+  <select id="listByCinema" resultType="com.xd.cinema.module.showing.entity.Showing">
+    select *
+    from t_showing
+    where cinema_id=#{cinemaId}
+      and audit_status=1
+      <if test="movieId != null">
+        and movie_id=#{movieId}
+      </if>
+    order by start_time asc
+  </select>
+
+  <select id="listByCinemaVo" resultType="com.xd.cinema.module.showing.vo.ShowingItemVO">
+    select s.id,
+           s.cinema_id as cinemaId,
+           c.name as cinemaName,
+           s.hall_id as hallId,
+           h.name as hallName,
+           s.movie_id as movieId,
+           m.name as movieName,
+           m.poster_url as moviePosterUrl,
+           s.start_time as startTime,
+           s.end_time as endTime,
+           s.ticket_price as ticketPrice,
+           s.audit_status as auditStatus
+    from t_showing s
+    join t_cinema c on c.id = s.cinema_id
+    join t_hall h on h.id = s.hall_id
+    join t_movie m on m.id = s.movie_id
+    where s.cinema_id=#{cinemaId}
+      and s.audit_status=1
+      <if test="movieId != null">
+        and s.movie_id=#{movieId}
+      </if>
+    order by s.start_time asc
+  </select>
+
+  <select id="listByCinemaAdmin" resultType="com.xd.cinema.module.showing.entity.Showing">
+    select * from t_showing where cinema_id=#{cinemaId} order by id desc
+  </select>
+
+  <select id="listByCinemaAdminVo" resultType="com.xd.cinema.module.showing.vo.ShowingItemVO">
+    select s.id,
+           s.cinema_id as cinemaId,
+           c.name as cinemaName,
+           s.hall_id as hallId,
+           h.name as hallName,
+           s.movie_id as movieId,
+           m.name as movieName,
+           m.poster_url as moviePosterUrl,
+           s.start_time as startTime,
+           s.end_time as endTime,
+           s.ticket_price as ticketPrice,
+           s.audit_status as auditStatus
+    from t_showing s
+    join t_cinema c on c.id = s.cinema_id
+    join t_hall h on h.id = s.hall_id
+    join t_movie m on m.id = s.movie_id
+    where s.cinema_id=#{cinemaId}
+    order by s.id desc
+  </select>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    insert into t_showing(
+      cinema_id,hall_id,movie_id,start_time,end_time,ticket_price,
+      submitter_cinema_admin_id,audit_status
+    ) values (
+      #{cinemaId},#{hallId},#{movieId},#{startTime},#{endTime},#{ticketPrice},
+      #{submitterCinemaAdminId},#{auditStatus}
+    )
+  </insert>
+
+  <update id="audit">
+    update t_showing
+    set audit_status=#{auditStatus}, audited_by_admin_id=#{adminId}, audited_time=now(), audit_reason=#{reason}
+    where id=#{id}
+  </update>
+
+  <delete id="delete">
+    delete from t_showing where id=#{id}
+  </delete>
+
+</mapper>
+

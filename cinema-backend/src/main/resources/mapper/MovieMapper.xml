@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xd.cinema.module.movie.mapper.MovieMapper">
+
+  <select id="findById" resultType="com.xd.cinema.module.movie.entity.Movie">
+    select * from t_movie where id = #{id}
+  </select>
+
+  <select id="listByStatus" resultType="com.xd.cinema.module.movie.entity.Movie">
+    select *
+    from t_movie
+    <where>
+      <if test="status != null">
+        and status = #{status}
+      </if>
+      <if test="keyword != null and keyword != ''">
+        and name like concat('%', #{keyword}, '%')
+      </if>
+    </where>
+    order by release_date desc, id desc
+  </select>
+
+  <select id="listFilter" resultType="com.xd.cinema.module.movie.entity.Movie">
+    select m.*
+    from t_movie m
+    <if test="typeId != null">
+      join t_movie_type_rel r on r.movie_id = m.id and r.type_id = #{typeId}
+    </if>
+    <where>
+      and m.status != 2
+      <if test="year != null">
+        and m.year = #{year}
+      </if>
+      <if test="region != null and region != ''">
+        and m.region = #{region}
+      </if>
+      <if test="keyword != null and keyword != ''">
+        and m.name like concat('%', #{keyword}, '%')
+      </if>
+    </where>
+    order by m.status asc, m.release_date desc, m.id desc
+  </select>
+
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    insert into t_movie(
+      name, name_en, poster_url, region, year, language, release_date, duration_min,
+      intro, trailer_json, status, total_box_office, rating_avg, rating_count
+    ) values (
+      #{name}, #{nameEn}, #{posterUrl}, #{region}, #{year}, #{language}, #{releaseDate}, #{durationMin},
+      #{intro}, #{trailerJson}, #{status}, #{totalBoxOffice}, #{ratingAvg}, #{ratingCount}
+    )
+  </insert>
+
+  <update id="update">
+    update t_movie
+    set
+      name=#{name},
+      name_en=#{nameEn},
+      poster_url=#{posterUrl},
+      region=#{region},
+      year=#{year},
+      language=#{language},
+      release_date=#{releaseDate},
+      duration_min=#{durationMin},
+      intro=#{intro},
+      trailer_json=#{trailerJson},
+      status=#{status}
+    where id=#{id}
+  </update>
+
+  <delete id="delete">
+    delete from t_movie where id=#{id}
+  </delete>
+
+  <select id="topBoxOffice" resultType="com.xd.cinema.module.movie.entity.Movie">
+    select * from t_movie order by total_box_office desc, id desc limit #{limit}
+  </select>
+
+  <select id="topRating" resultType="com.xd.cinema.module.movie.entity.Movie">
+    select * from t_movie where rating_count &gt; 0 order by rating_avg desc, rating_count desc, id desc limit #{limit}
+  </select>
+
+  <update id="incBoxOffice">
+    update t_movie
+    set total_box_office = ifnull(total_box_office, 0) + #{delta}, updated_time=now()
+    where id=#{movieId}
+  </update>
+
+  <update id="updateRatingCache">
+    update t_movie
+    set rating_avg = #{avg}, rating_count = #{cnt}, updated_time=now()
+    where id=#{movieId}
+  </update>
+
+</mapper>
+
