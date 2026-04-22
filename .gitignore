@@ -5,8 +5,25 @@ node_modules/
 dist/
 .idea/
 .vscode/
+*.iml
 
 cinema-backend/src/main/resources/application-local.yml
 .env
 .env.*
 
+*.log
+logs/
+
+target/
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/
+
+cinema-frontend/node_modules/
+cinema-frontend/dist/
+cinema-frontend/.vite/
+cinema-frontend/*.local
+
+.vercel/
+.trae/
