@@ -12,7 +12,7 @@ public class MovieUserAction {
   private LocalDateTime favoriteTime;
   private Integer score;
   private LocalDateTime scoreTime;
+  private String content;
   private LocalDateTime createdTime;
   private LocalDateTime updatedTime;
 }
-

@@ -4,6 +4,7 @@ import com.xd.cinema.common.api.ApiResult;
 import com.xd.cinema.common.enums.RoleType;
 import com.xd.cinema.common.exception.BizException;
 import com.xd.cinema.common.security.RequireRole;
+import com.xd.cinema.common.security.UserContext;
 import com.xd.cinema.common.util.PasswordUtil;
 import com.xd.cinema.module.admin.entity.Admin;
 import com.xd.cinema.module.admin.mapper.AdminMapper;
@@ -78,6 +79,19 @@ public class AdminUserManageController {
   public ApiResult<Void> cinemaAdminStatus(@PathVariable Long id, @PathVariable int status) {
     cinemaAdminMapper.updateStatus(id, status);
     return ApiResult.ok();
+  }
+
+  @PostMapping("/cinema-admins/{id}/audit")
+  public ApiResult<Void> auditCinemaAdmin(@PathVariable Long id, @Valid @RequestBody AuditRequest req) {
+    cinemaAdminMapper.audit(id, req.auditStatus, UserContext.get().getId(), req.reason, req.cinemaId);
+    return ApiResult.ok();
+  }
+
+  @Data
+  public static class AuditRequest {
+    private Integer auditStatus;
+    private String reason;
+    private Long cinemaId;
   }
 
   @Data

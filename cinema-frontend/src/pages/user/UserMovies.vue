@@ -5,17 +5,7 @@ import { httpGet } from '@/api/client'
 import { useRouter } from 'vue-router'
 
 type Cinema = { id: number; name: string }
-type Movie = { id: number; name: string; posterUrl?: string; status?: number; totalBoxOffice?: number }
-type ShowingItem = {
-  id: number
-  cinemaId: number
-  cinemaName: string
-  hallName: string
-  movieName: string
-  startTime: string
-  endTime: string
-  ticketPrice: string | number
-}
+type Movie = { id: number; name: string; posterUrl?: string; status?: number; totalBoxOffice?: number; ratingAvg?: number }
 
 const router = useRouter()
 
@@ -25,12 +15,11 @@ const keyword = ref('')
 const loading = ref(false)
 const movies = ref<Movie[]>([])
 
-const drawer = ref(false)
-const drawerLoading = ref(false)
-const currentMovieId = ref<number | null>(null)
-const showings = ref<ShowingItem[]>([])
-
 const canOpen = computed(() => !!cinemaId.value)
+
+function getPoster(movie: Movie): string {
+  return movie.posterUrl || ''
+}
 
 function onCinemaChange(v: number) {
   localStorage.setItem('cinema_lastCinemaId', String(v))
@@ -60,27 +49,8 @@ async function loadMovies() {
   }
 }
 
-async function openShowings(movieId: number) {
-  if (!cinemaId.value) {
-    ElMessage.warning('请先选择影院')
-    return
-  }
-  drawer.value = true
-  drawerLoading.value = true
-  currentMovieId.value = movieId
-  try {
-    showings.value = await httpGet<ShowingItem[]>('/api/showings', {
-      params: { cinemaId: cinemaId.value, movieId },
-    })
-  } catch (e: any) {
-    ElMessage.error(e?.message || '加载排期失败')
-  } finally {
-    drawerLoading.value = false
-  }
-}
-
-function goBooking(showId: number) {
-  router.push(`/u/booking/${showId}`)
+function goDetail(movieId: number) {
+  router.push(`/u/movie/${movieId}`)
 }
 
 loadCinemas()
@@ -98,29 +68,137 @@ loadMovies()
     </div>
   </el-card>
 
-  <el-card shadow="never" class="mt-4">
-    <el-table :data="movies" size="small" style="width: 100%" :loading="loading">
-      <el-table-column prop="name" label="影片" />
-      <el-table-column prop="totalBoxOffice" label="总票房" width="120" />
-      <el-table-column label="操作" width="160">
-        <template #default="scope">
-          <el-button size="small" type="primary" :disabled="!canOpen" @click="openShowings(scope.row.id)">查看排期</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-  </el-card>
+  <!-- 电影卡片网格 -->
+  <div v-loading="loading" class="movie-grid mt-4">
+    <div
+      v-for="movie in movies"
+      :key="movie.id"
+      class="movie-card"
+      @click="goDetail(movie.id)"
+    >
+      <!-- 海报区域 -->
+      <div class="movie-poster">
+        <img
+          :src="getPoster(movie)"
+          :alt="movie.name"
+          class="poster-img"
+          loading="lazy"
+          @error="($event.target as HTMLImageElement).style.display='none'"
+        />
+        <div class="movie-title-overlay">{{ movie.name }}</div>
+      </div>
+      
+      <!-- 信息区域 -->
+      <div class="movie-info">
+        <h3 class="movie-name">{{ movie.name }}</h3>
+        <div class="movie-meta">
+          <span class="box-office">票房: {{ movie.totalBoxOffice || 0 }}万</span>
+          <span v-if="movie.ratingAvg" class="rating">评分: {{ movie.ratingAvg }}</span>
+        </div>
+        <el-button 
+          size="small" 
+          type="primary" 
+          class="w-full mt-2"
+          @click.stop="goDetail(movie.id)"
+        >
+          查看详情
+        </el-button>
+      </div>
+    </div>
+  </div>
 
-  <el-drawer v-model="drawer" title="选择场次" size="520px">
-    <el-table :data="showings" size="small" :loading="drawerLoading" style="width: 100%">
-      <el-table-column prop="startTime" label="开始" width="165" />
-      <el-table-column prop="hallName" label="影厅" width="120" />
-      <el-table-column prop="ticketPrice" label="票价" width="90" />
-      <el-table-column label="" width="110">
-        <template #default="scope">
-          <el-button size="small" type="primary" @click="goBooking(scope.row.id)">选座</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-  </el-drawer>
+  <!-- 空状态 -->
+  <el-empty v-if="!loading && movies.length === 0" description="暂无影片" class="mt-8" />
 </template>
 
+<style scoped>
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 0 4px;
+}
+
+.movie-card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  background: white;
+}
+
+.movie-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.movie-poster {
+  position: relative;
+  height: 280px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.poster-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.movie-card:hover .poster-img {
+  transform: scale(1.05);
+}
+
+.movie-title-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 30px 12px 12px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movie-info {
+  background: white;
+  padding: 12px;
+}
+
+.movie-name {
+  margin: 0 0 8px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movie-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.box-office {
+  color: #ff6b6b;
+}
+
+.rating {
+  color: #ffa502;
+}
+
+:deep(.el-button) {
+  border-radius: 6px;
+}
+</style>

@@ -2,6 +2,7 @@ package com.xd.cinema.module.user.mapper;
 
 import com.xd.cinema.module.user.entity.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -30,5 +31,8 @@ public interface UserMapper {
 
   @Update("update t_user set status=#{status} where id=#{id}")
   int updateStatus(@Param("id") Long id, @Param("status") int status);
+
+  @Delete("delete from t_user where id=#{id}")
+  int deleteById(Long id);
 }
 

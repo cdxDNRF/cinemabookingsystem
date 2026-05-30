@@ -36,6 +36,11 @@ public class ShowingServiceImpl implements ShowingService {
     if (!req.getEndTime().isAfter(req.getStartTime())) {
       throw new BizException(400, "结束时间必须晚于开始时间");
     }
+    List<Showing> conflicts = showingMapper.listByHallAndTimeRange(req.getHallId(), req.getStartTime(),
+        req.getEndTime(), null);
+    if (!conflicts.isEmpty()) {
+      throw new BizException(400, "该影厅在选定时间段内已有排期");
+    }
     Showing s = new Showing();
     s.setCinemaId(cinemaId);
     s.setHallId(req.getHallId());
@@ -47,6 +52,46 @@ public class ShowingServiceImpl implements ShowingService {
     s.setAuditStatus(0);
     showingMapper.insert(s);
     return s.getId();
+  }
+
+  @Override
+  @Transactional
+  public void updateShowing(Long cinemaAdminId, Long cinemaId, Long showingId, ShowingApplyRequest req) {
+    Showing existing = showingMapper.findById(showingId);
+    if (existing == null || !cinemaId.equals(existing.getCinemaId())) {
+      throw new BizException(404, "场次不存在");
+    }
+    if (movieMapper.findById(req.getMovieId()) == null) {
+      throw new BizException(404, "电影不存在");
+    }
+    Hall hall = hallMapper.findById(req.getHallId());
+    if (hall == null || !cinemaId.equals(hall.getCinemaId())) {
+      throw new BizException(400, "影厅不存在或不属于本影院");
+    }
+    if (!req.getEndTime().isAfter(req.getStartTime())) {
+      throw new BizException(400, "结束时间必须晚于开始时间");
+    }
+    List<Showing> conflicts = showingMapper.listByHallAndTimeRange(req.getHallId(), req.getStartTime(),
+        req.getEndTime(), showingId);
+    if (!conflicts.isEmpty()) {
+      throw new BizException(400, "该影厅在选定时间段内已有排期");
+    }
+    existing.setHallId(req.getHallId());
+    existing.setMovieId(req.getMovieId());
+    existing.setStartTime(req.getStartTime());
+    existing.setEndTime(req.getEndTime());
+    existing.setTicketPrice(req.getTicketPrice());
+    showingMapper.update(existing);
+  }
+
+  @Override
+  @Transactional
+  public void deleteShowing(Long cinemaId, Long showingId) {
+    Showing existing = showingMapper.findById(showingId);
+    if (existing == null || !cinemaId.equals(existing.getCinemaId())) {
+      throw new BizException(404, "场次不存在");
+    }
+    showingMapper.delete(showingId);
   }
 
   @Override
@@ -76,5 +121,44 @@ public class ShowingServiceImpl implements ShowingService {
   public List<Showing> listAdminShowings(Integer auditStatus, Long cinemaId, Long movieId) {
     return showingMapper.listAdmin(auditStatus, cinemaId, movieId);
   }
-}
 
+  @Override
+  @Transactional
+  public void adminUpdateShowing(Long showingId, ShowingApplyRequest req) {
+    Showing existing = showingMapper.findById(showingId);
+    if (existing == null) {
+      throw new BizException(404, "场次不存在");
+    }
+    if (movieMapper.findById(req.getMovieId()) == null) {
+      throw new BizException(404, "电影不存在");
+    }
+    Hall hall = hallMapper.findById(req.getHallId());
+    if (hall == null) {
+      throw new BizException(400, "影厅不存在");
+    }
+    if (!req.getEndTime().isAfter(req.getStartTime())) {
+      throw new BizException(400, "结束时间必须晚于开始时间");
+    }
+    List<Showing> conflicts = showingMapper.listByHallAndTimeRange(req.getHallId(), req.getStartTime(),
+        req.getEndTime(), showingId);
+    if (!conflicts.isEmpty()) {
+      throw new BizException(400, "该影厅在选定时间段内已有排期");
+    }
+    existing.setHallId(req.getHallId());
+    existing.setMovieId(req.getMovieId());
+    existing.setStartTime(req.getStartTime());
+    existing.setEndTime(req.getEndTime());
+    existing.setTicketPrice(req.getTicketPrice());
+    showingMapper.update(existing);
+  }
+
+  @Override
+  @Transactional
+  public void adminDeleteShowing(Long showingId) {
+    Showing existing = showingMapper.findById(showingId);
+    if (existing == null) {
+      throw new BizException(404, "场次不存在");
+    }
+    showingMapper.delete(showingId);
+  }
+}

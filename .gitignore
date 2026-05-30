@@ -1,29 +1,81 @@
+# ============================================
+# OS / Editor generated files
+# ============================================
 .DS_Store
 Thumbs.db
+*.swp
+*.swo
+*~
 
-node_modules/
-dist/
+# ============================================
+# IDE / Editor configurations
+# ============================================
 .idea/
 .vscode/
 *.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
 
-cinema-backend/src/main/resources/application-local.yml
-.env
-.env.*
-
-*.log
-logs/
-
-target/
-*.class
-*.jar
-!.mvn/wrapper/maven-wrapper.jar
-.mvn/
-
+# ============================================
+# Frontend - cinema-frontend
+# ============================================
 cinema-frontend/node_modules/
 cinema-frontend/dist/
 cinema-frontend/.vite/
 cinema-frontend/*.local
+cinema-frontend/.env
+cinema-frontend/.env.*
 
+# ============================================
+# Backend - cinema-backend
+# ============================================
+cinema-backend/target/
+cinema-backend/*.class
+cinema-backend/*.jar
+cinema-backend/.mvn/
+
+# Sensitive / local-only configuration
+cinema-backend/src/main/resources/application-local.yml
+cinema-backend/src/main/resources/application-dev.yml
+cinema-backend/src/main/resources/application-prod.yml
+
+# ============================================
+# Logs
+# ============================================
+*.log
+logs/
+log/
+
+# ============================================
+# Environment / Secrets
+# ============================================
+.env
+.env.*
+!.env.example
+
+# ============================================
+# Build artifacts
+# ============================================
+dist/
+build/
+out/
+
+# ============================================
+# Dependency directories
+# ============================================
+node_modules/
+.mvn/
+
+# ============================================
+# Deployment / Hosting
+# ============================================
 .vercel/
+.netlify/
+
+# ============================================
+# Trae / AI Assistant
+# ============================================
 .trae/

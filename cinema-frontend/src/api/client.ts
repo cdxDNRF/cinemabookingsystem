@@ -55,9 +55,6 @@ api.interceptors.response.use(
             localStorage.removeItem('cinema_username')
             localStorage.removeItem('cinema_nickname')
             localStorage.removeItem('cinema_cinemaId')
-            if (!location.pathname.startsWith('/login')) {
-                location.href = `/login?redirect=${encodeURIComponent(location.pathname + location.search)}`
-            }
         }
         throw err
     }

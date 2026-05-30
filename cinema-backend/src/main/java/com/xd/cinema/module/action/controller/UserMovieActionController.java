@@ -63,10 +63,12 @@ public class UserMovieActionController {
       action.setIsFavorite(0);
       action.setScore(body.score);
       action.setScoreTime(LocalDateTime.now());
+      action.setContent(body.content);
       actionMapper.insert(action);
     } else {
       action.setScore(body.score);
       action.setScoreTime(LocalDateTime.now());
+      action.setContent(body.content);
       actionMapper.update(action);
     }
     MovieUserActionMapper.RatingRow row = actionMapper.calcRating(movieId);
@@ -77,6 +79,11 @@ public class UserMovieActionController {
     return ApiResult.ok();
   }
 
+  @GetMapping("/{movieId}/comments")
+  public ApiResult<List<MovieUserAction>> comments(@PathVariable Long movieId) {
+    return ApiResult.ok(actionMapper.listComments(movieId));
+  }
+
   @GetMapping("/favorites")
   public ApiResult<List<MovieUserAction>> favorites() {
     return ApiResult.ok(actionMapper.listFavorites(UserContext.get().getId()));
@@ -84,6 +91,6 @@ public class UserMovieActionController {
 
   public static class ScoreBody {
     public Integer score;
+    public String content;
   }
 }
-

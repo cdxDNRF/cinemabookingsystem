@@ -92,6 +92,11 @@ async function onSubmit() {
           </el-form-item>
 
           <el-button type="primary" class="w-full" :loading="loading" @click="onSubmit">登录</el-button>
+
+          <div class="mt-4 text-center text-sm text-slate-500">
+            还没有账号？
+            <router-link to="/register" class="text-blue-600 hover:text-blue-500">立即注册</router-link>
+          </div>
         </el-form>
       </el-card>
 

@@ -42,6 +42,7 @@ com\xd\cinema\module\movie\vo\MovieDetailVO.class
 com\xd\cinema\module\user\mapper\UserMapper.class
 com\xd\cinema\auth\controller\AuthController.class
 com\xd\cinema\module\movie\entity\MovieTypeRel.class
+com\xd\cinema\module\admin\controller\AdminUserManageController$AuditRequest.class
 com\xd\cinema\module\movie\controller\AdminMovieStaffController.class
 com\xd\cinema\module\notice\mapper\NoticeMapper.class
 com\xd\cinema\module\movie\controller\AdminMovieTypeController.class
@@ -65,6 +66,7 @@ com\xd\cinema\common\enums\RoleType.class
 com\xd\cinema\module\showing\dto\ShowingApplyRequest.class
 com\xd\cinema\module\showing\controller\ShowingPublicController.class
 com\xd\cinema\module\order\service\impl\OrderServiceImpl.class
+com\xd\cinema\module\showing\controller\AdminShowingController.class
 com\xd\cinema\module\home\controller\HomeController.class
 com\xd\cinema\module\order\vo\OrderCreateVO.class
 com\xd\cinema\module\cinema\controller\CinemaAdminHallController.class

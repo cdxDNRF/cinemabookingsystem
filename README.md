@@ -6,59 +6,87 @@
 - 影院管理员（Cinema Admin）
 - 普通用户（User）
 
-并实现：多影院、多影厅、多场次；在线 8×8 选座（锁座/超时释放）；ECharts 数据统计；预告片视频播放；订单二层展开座位信息等。
+并实现：多影院、多影厅、多场次排期管理；在线 8×8 选座（锁座/超时释放）；ECharts 数据统计；预告片视频播放；订单二层展开座位信息；用户注册与账户管理；影院管理员审核流程等。
 
-## 技术栈（严格遵守）
+***
 
-- 后端：Spring Boot 3 + MyBatis + Hutool + Lombok + MySQL
-- 前端：Vue3 + TypeScript + Element-Plus + Vue-Router + Axios + Pinia + Echarts
-- 数据库：MySQL 5.7 / 8.0（建议 8.0）
-- JDK：>= 17
-- Node.js：>= 18
-- Maven：>= 3.8
+## 技术栈
+
+- **后端**：Spring Boot 3 + MyBatis + Hutool + Lombok + MySQL
+- **前端**：Vue 3 + TypeScript + Element-Plus + Vue-Router + Axios + Pinia + ECharts
+- **数据库**：MySQL 5.7 / 8.0（建议 8.0）
+- **JDK**：>= 17
+- **Node.js**：>= 18
+- **Maven**：>= 3.8
+
+***
 
 ## 项目结构
 
-- `cinema-backend/`：后端工程（REST API）
-- `cinema-frontend/`：前端工程（Vite + Vue3）
-- `database.sql`：14 张表 + 外键 + 初始化数据
+```
+cinemabookingsystem/
+├── cinema-backend/          # 后端工程（REST API）
+├── cinema-frontend/         # 前端工程（Vite + Vue3）
+├── database.sql             # 数据库脚本（14 张表 + 外键 + 初始化数据）
+├── README.md                # 项目说明文档（本文档）
+├── 项目汇报文档.md           # 详细技术汇报文档
+└── 新手解读文档.md           # 零基础入门解读
+```
+
+***
 
 ## 数据库（14 张表）
 
-所有表均使用：`t_` 前缀 + `utf8mb4_unicode_ci`。
+所有表均使用：`t_` 前缀 + `utf8mb4_unicode_ci` 字符集。
 
-导入方式：
+### 导入方式
 
 1. 启动 MySQL
-2. 执行根目录的 `database.sql`
+2. 创建数据库：
+
+```sql
+CREATE DATABASE IF NOT EXISTS cinema CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE cinema;
+```
+
+1. 执行根目录的 `database.sql`：
 
 ```sql
 source /path/to/database.sql;
 ```
+
+> **注意**：`database.sql` 已包含完整的表结构、约束、索引和示例数据（含 30 部电影、3 个影院、多个影厅和排期）。
+
+***
 
 ## 本地启动
 
 ### 0）前置条件
 
 - MySQL 已启动，可连接（默认连接 `127.0.0.1:3306`）
-- 已导入 `database.sql`
+- 已创建 `cinema` 数据库并导入 `database.sql`
 
 ### 1）启动后端（cinema-backend）
 
-后端默认端口：`8080`。
+后端默认端口：`8080`
 
-1. 复制一份本地配置（不要把密码提交到 Git）
+#### 配置本地数据库连接
 
-将 `cinema-backend/src/main/resources/application-local.example.yml` 复制为：
+1. 复制配置模板：
 
-`cinema-backend/src/main/resources/application-local.yml`
+```bash
+cp cinema-backend/src/main/resources/application-local.example.yml \
+   cinema-backend/src/main/resources/application-local.yml
+```
 
-并修改：
+1. 修改 `application-local.yml`：
 
-- `spring.datasource.username/password`
-- `cinema.jwt.secret`
+- `spring.datasource.username` / `password` —— 你的 MySQL 账号密码
+- `cinema.jwt.secret` —— JWT 密钥（建议修改为随机字符串）
 
-2. 启动
+> ⚠️ **重要**：`application-local.yml` 包含敏感信息，**不要提交到 Git**（已在 `.gitignore` 中排除）。
+
+#### 启动服务
 
 ```bash
 cd cinema-backend
@@ -71,7 +99,7 @@ mvn spring-boot:run
 
 ### 2）启动前端（cinema-frontend）
 
-前端默认端口：`5173`。
+前端默认端口：`5173`
 
 ```bash
 cd cinema-frontend
@@ -81,95 +109,84 @@ npm run dev
 
 访问：`http://127.0.0.1:5173/`
 
-说明：开发环境已在 `vite.config.ts` 配好代理：`/api -> http://localhost:8080`。
+> 开发环境已在 `vite.config.ts` 配好代理：`/api -> http://localhost:8080`
+
+***
 
 ## 测试账号
 
 初始化数据在 `database.sql` 中。
 
-- 超级管理员（Admin）
-  - 用户名：`admin`
-  - 密码：`123456`
+### 超级管理员（Admin）
 
-- 普通用户（User）
-  - 用户名：`zhangsan` / `lisi`
-  - 密码：`123456`
+- 用户名：`admin`
+- 密码：`123456`
 
-- 影院管理员（Cinema Admin）
-  - 已审核通过：用户名 `cinema1`，密码 `123456`
-  - 待审核：用户名 `cinema2`，密码 `123456`
+### 普通用户（User）
 
-## 使用说明（核心流程）
+- 用户名：`zhangsan` / `lisi`
+- 密码：`123456`
 
-### 普通用户
+### 影院管理员（Cinema Admin）
 
-- 首页：热播/待映、Top10、今日票房
-- 电影列表：按类型/年代/地区筛选
-- 电影详情：简介、演职人员、预告片播放
-- 选座购票：8×8 座位图（占用/可选/已选）+ 下单锁座 + 支付/取消
-- 我的订单：支持按订单号查询；可取消待支付/待取票订单
-- 收藏与评分：评分 1-10，并更新电影评分榜
+- 已审核通过：用户名 `cinema1`，密码 `123456`
+- 待审核：用户名 `cinema2`，密码 `123456`
 
-### 影院管理员
+***
 
-- 注册后提交影院信息，等待管理员审核
-- 影厅管理：默认 8×8
-- 场次管理：提交放映申请，等待管理员审批
-- 订单管理：查看本影院订单
+## 主要功能模块
 
-### 超级管理员
+### 普通用户端
 
-- 统计首页：近 7 日票房折线 + 类型数量饼图 + 类型票房柱图（ECharts）
-- 影院管理员审核
-- 电影类型/电影信息/演职人员管理
-- 场次审核（通用审批模型）
-- 影厅房间全局管理
-- 全部订单管理
-- 公告管理
-- 用户/管理员/影院管理员账号管理
+- 浏览电影首页、电影列表、电影详情
+- 按类型 / 年代 / 地区筛选电影
+- 查看排期、在线选座购票
+- 收藏电影、评分评论
+- 查看我的订单、取消待支付订单
+- 用户注册、账户注销
 
-## 配置与安全
+### 影院管理员端
 
-- 不要把真实密码写进公共配置并提交到 Git
-  - 后端使用 `application-local.yml`（已在 `.gitignore` 忽略）
-  - 前端生产环境通过 `VITE_API_BASE_URL` 配置后端地址
+- 影院信息管理
+- 影厅增删改查
+- 排期管理（添加 / 编辑 / 删除 / 冲突检测）
+- 查看本影院订单
 
-## 前端构建与检查
+### 超级管理员端
 
-```bash
-cd cinema-frontend
-npm run check
-npm run lint
-npm run build
-```
+- 影院入驻审核
+- 电影信息管理（CRUD、类型、演职人员）
+- 全局排期审核与管理
+- 订单管理
+- 数据统计（ECharts 图表）
+- 系统公告发布
+- 账号管理（用户 / 影院管理员 / 管理员）
 
-## 后端测试与打包
+***
 
-```bash
-cd cinema-backend
-mvn test
-mvn -DskipTests package
-```
+## 关键特性
 
-## 部署
+| 特性          | 说明                                   |
+| ----------- | ------------------------------------ |
+| **三角色权限体系** | 基于 JWT + 自定义注解的声明式权限控制               |
+| **排期冲突检测**  | 同一影厅同一时间段不可重复排期                      |
+| **在线选座锁座**  | 8×8 座位图，下单锁定 10 分钟，超时自动释放            |
+| **数据可视化**   | ECharts 展示票房趋势、类型分布、影院排行等            |
+| **真实电影海报**  | 通过 TMDB API 获取真实海报 URL，带默认图 fallback |
+| **前后端分离**   | 独立开发、独立部署，RESTful API 通信             |
 
-### 前端（Vercel）
+***
 
-本仓库已提供 `vercel.json`（单页应用 history 路由回退到 `index.html`）。
+## 文档索引
 
-- 生产环境需要在 Vercel 环境变量里设置：`VITE_API_BASE_URL` 为你的后端公网地址
-- 重新部署后即可联调
+| 文档                     | 说明                       |
+| ---------------------- | ------------------------ |
+| [README.md](README.md) | 项目简介与快速启动指南（本文档）         |
+| [项目汇报文档.md](项目汇报文档.md) | 详细技术架构、数据库设计、API 设计、项目结构 |
+| [新手解读文档.md](新手解读文档.md) | 零基础友好版解读，通俗解释技术概念        |
 
-### 后端
+***
 
-后端是 Spring Boot 服务，需要部署到可公网访问的服务器（或使用内网穿透）。
+## 许可证
 
-## 开发流程建议
-
-1. 数据库：先更新 `database.sql`（保持 14 表约束、外键一致）
-2. 后端：先补接口与校验（统一返回/异常/鉴权），再联调
-3. 前端：按页面模块开发（先布局与样式，再接 API）
-4. 自检：
-   - 后端 `mvn test`
-   - 前端 `npm run check && npm run lint && npm run build`
-
+本项目仅供学习交流使用。

@@ -83,6 +83,7 @@ D:\AIagent\软件工程项目作业\cinema-backend\src\main\java\com\xd\cinema\m
 D:\AIagent\软件工程项目作业\cinema-backend\src\main\java\com\xd\cinema\module\profile\controller\UserProfileController.java
 D:\AIagent\软件工程项目作业\cinema-backend\src\main\java\com\xd\cinema\module\profile\dto\ChangePasswordRequest.java
 D:\AIagent\软件工程项目作业\cinema-backend\src\main\java\com\xd\cinema\module\showing\controller\AdminShowingAuditController.java
+D:\AIagent\软件工程项目作业\cinema-backend\src\main\java\com\xd\cinema\module\showing\controller\AdminShowingController.java
 D:\AIagent\软件工程项目作业\cinema-backend\src\main\java\com\xd\cinema\module\showing\controller\CinemaAdminShowingController.java
 D:\AIagent\软件工程项目作业\cinema-backend\src\main\java\com\xd\cinema\module\showing\controller\ShowingPublicController.java
 D:\AIagent\软件工程项目作业\cinema-backend\src\main\java\com\xd\cinema\module\showing\dto\ShowingApplyRequest.java

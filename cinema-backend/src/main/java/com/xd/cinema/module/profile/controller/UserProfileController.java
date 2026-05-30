@@ -10,6 +10,7 @@ import com.xd.cinema.module.user.entity.User;
 import com.xd.cinema.module.user.mapper.UserMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,6 +44,12 @@ public class UserProfileController {
       return ApiResult.fail(400, "原密码错误");
     }
     userMapper.updatePassword(user.getId(), PasswordUtil.hash(req.getNewPassword()));
+    return ApiResult.ok();
+  }
+
+  @DeleteMapping("/profile")
+  public ApiResult<Void> deleteAccount() {
+    userMapper.deleteById(UserContext.get().getId());
     return ApiResult.ok();
   }
 }

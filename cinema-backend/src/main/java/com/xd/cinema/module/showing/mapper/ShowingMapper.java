@@ -2,6 +2,7 @@ package com.xd.cinema.module.showing.mapper;
 
 import com.xd.cinema.module.showing.entity.Showing;
 import com.xd.cinema.module.showing.vo.ShowingItemVO;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -20,7 +21,11 @@ public interface ShowingMapper {
 
   List<ShowingItemVO> listByCinemaAdminVo(@Param("cinemaId") Long cinemaId);
 
+  List<Showing> listByHallAndTimeRange(@Param("hallId") Long hallId, @Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime, @Param("excludeId") Long excludeId);
+
   int insert(Showing showing);
+
+  int update(Showing showing);
 
   int audit(@Param("id") Long id, @Param("auditStatus") int auditStatus, @Param("adminId") Long adminId, @Param("reason") String reason);
 
