@@ -1,6 +1,8 @@
 package com.xd.cinema.module.movie.controller;
 
 import com.xd.cinema.common.api.ApiResult;
+import com.xd.cinema.module.action.entity.MovieUserAction;
+import com.xd.cinema.module.action.mapper.MovieUserActionMapper;
 import com.xd.cinema.module.movie.entity.Movie;
 import com.xd.cinema.module.movie.entity.MovieType;
 import com.xd.cinema.module.movie.service.MovieService;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MoviePublicController {
 
   private final MovieService movieService;
+  private final MovieUserActionMapper actionMapper;
 
   @GetMapping("/types")
   public ApiResult<List<MovieType>> types() {
@@ -30,8 +33,7 @@ public class MoviePublicController {
       @RequestParam(required = false) Long typeId,
       @RequestParam(required = false) Integer year,
       @RequestParam(required = false) String region,
-      @RequestParam(required = false) String keyword
-  ) {
+      @RequestParam(required = false) String keyword) {
     return ApiResult.ok(movieService.listMoviesFilter(typeId, year, region, keyword));
   }
 
@@ -49,5 +51,9 @@ public class MoviePublicController {
   public ApiResult<List<Movie>> topRating(@RequestParam(defaultValue = "10") int limit) {
     return ApiResult.ok(movieService.topRating(limit));
   }
-}
 
+  @GetMapping("/{id}/comments")
+  public ApiResult<List<MovieUserAction>> comments(@PathVariable("id") Long movieId) {
+    return ApiResult.ok(actionMapper.listComments(movieId));
+  }
+}

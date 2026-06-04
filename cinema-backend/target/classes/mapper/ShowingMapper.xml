@@ -54,12 +54,14 @@
     join t_cinema c on c.id = s.cinema_id
     join t_hall h on h.id = s.hall_id
     join t_movie m on m.id = s.movie_id
-    where s.cinema_id=#{cinemaId}
-      and s.audit_status=1
+    where s.audit_status=1
+      <if test="cinemaId != null">
+        and s.cinema_id=#{cinemaId}
+      </if>
       <if test="movieId != null">
         and s.movie_id=#{movieId}
       </if>
-    order by s.start_time asc
+    order by s.cinema_id asc, s.start_time asc
   </select>
 
   <select id="listByCinemaAdmin" resultType="com.xd.cinema.module.showing.entity.Showing">

@@ -79,3 +79,19 @@ node_modules/
 # Trae / AI Assistant
 # ============================================
 .trae/
+
+# ============================================
+# Project generated / temp files
+# ============================================
+# SQL fix scripts (one-time use)
+fix_*.sql
+insert_*.sql
+
+# PPT generation temp files
+projects/
+
+# Local images / screenshots
+image/
+
+# CodeBuddy plans
+.codebuddy/

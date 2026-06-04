@@ -15,4 +15,7 @@ public class MovieUserAction {
   private String content;
   private LocalDateTime createdTime;
   private LocalDateTime updatedTime;
+
+  // 关联用户名称（非数据库字段）
+  private String userName;
 }

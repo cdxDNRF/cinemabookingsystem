@@ -18,8 +18,8 @@ public class ShowingPublicController {
   private final ShowingService showingService;
 
   @GetMapping
-  public ApiResult<List<ShowingItemVO>> listByCinema(@RequestParam Long cinemaId, @RequestParam(required = false) Long movieId) {
+  public ApiResult<List<ShowingItemVO>> listByCinema(@RequestParam(required = false) Long cinemaId,
+      @RequestParam(required = false) Long movieId) {
     return ApiResult.ok(showingService.listCinemaShowingsForUser(cinemaId, movieId));
   }
 }
-

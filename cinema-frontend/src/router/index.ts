@@ -11,6 +11,7 @@ import UserMovies from '@/pages/user/UserMovies.vue'
 import MovieDetail from '@/pages/user/MovieDetail.vue'
 import UserBooking from '@/pages/user/UserBooking.vue'
 import UserOrders from '@/pages/user/UserOrders.vue'
+import UserRankings from '@/pages/user/UserRankings.vue'
 
 import StaffHome from '@/pages/staff/StaffHome.vue'
 import StaffCinema from '@/pages/staff/StaffCinema.vue'
@@ -46,6 +47,7 @@ const routes: RouteRecordRaw[] = [
       { path: '', component: UserHome },
       { path: 'movies', component: UserMovies },
       { path: 'movie/:id', component: MovieDetail },
+      { path: 'rankings', component: UserRankings },
       { path: 'booking/:showId', component: UserBooking, meta: { requiresAuth: true, roles: ['USER'] } as RouteMetaRole },
       { path: 'orders', component: UserOrders, meta: { requiresAuth: true, roles: ['USER'] } as RouteMetaRole },
     ],

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-themes="tokyo-night,corporate-clean,academic-paper">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>电影购票系统 · 项目汇报</title>
+<link rel="stylesheet" href="file:///C:/Users/DFWJ/.agents/skills/html-ppt-skill/html-ppt-skill/assets/fonts.css">
+<link rel="stylesheet" href="file:///C:/Users/DFWJ/.agents/skills/html-ppt-skill/html-ppt-skill/assets/base.css">
+<link rel="stylesheet" id="theme-link" href="file:///C:/Users/DFWJ/.agents/skills/html-ppt-skill/html-ppt-skill/assets/themes/tokyo-night.css">
+<link rel="stylesheet" href="file:///C:/Users/DFWJ/.agents/skills/html-ppt-skill/html-ppt-skill/assets/animations/animations.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="tpl-presenter-mode-reveal">
+<div class="deck">
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 1 · 封面 -->
+  <!-- ============================================================ -->
+  <section class="slide" data-title="封面">
+    <p class="kicker">软件工程实践 · 课程项目汇报</p>
+    <h1 class="h1 anim-fade-up" data-anim="fade-up">影院管理系统<br><span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">Cinema Booking System</span></h1>
+    <p class="lede mt-m">仿猫眼电影 · 前后端分离 · 三角色权限 · 在线选座购票</p>
+    <div class="tag-row mt-l">
+      <span class="pill hl">Spring Boot 3</span>
+      <span class="pill hl">Vue 3 + TS</span>
+      <span class="pill hl">MyBatis</span>
+      <span class="pill hl">MySQL</span>
+      <span class="pill hl">JWT</span>
+      <span class="pill hl">ECharts</span>
+    </div>
+    <div class="speaker">
+      <div class="av"></div>
+      <div><b>软件工程实践小组</b><span>答辩汇报 · 约10分钟</span></div>
+    </div>
+    <div class="deck-footer">
+      <span class="mono">#cinema #spring-boot #vue3 #fullstack</span>
+      <span class="slide-number" data-current="1" data-total="10"></span>
+    </div>
+    <aside class="notes">
+      <p>各位老师好！今天我来汇报我们小组的软件工程实践项目——<strong>影院管理系统</strong>，一个仿猫眼电影的在线购票平台。</p>
+      <p>先简单说一下这个项目是什么：它是一个<strong>前后端完全分离</strong>的 Web 应用，前端用 Vue 3 加 TypeScript，后端用 Spring Boot 3，数据库是 MySQL。系统设计了<em>三种角色</em>——普通用户、影院管理员和超级管理员，覆盖了从浏览电影、在线选座购票到后台审核管理的完整业务流程。</p>
+      <p>核心功能包括：8×8 座位图实时选座、下单锁座 10 分钟超时自动释放、排期冲突检测、影院入驻审核工作流、ECharts 数据统计可视化，还有通过 TMDB API 获取的真实电影海报。</p>
+      <p>今天的汇报大概 10 分钟，我会从项目概述、技术架构、系统设计、核心流程、关键技术实现这几个方面来展开。好，我们开始。</p>
+    </aside>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 2 · 议程 -->
+  <!-- ============================================================ -->
+  <section class="slide" data-title="议程">
+    <p class="kicker">agenda</p>
+    <h2 class="h2">汇报大纲</h2>
+    <div class="stack mt-l">
+      <div class="agenda-row"><span class="num">01</span><span class="t">项目概述 — 做了什么、有什么亮点</span><span class="d">~1min</span></div>
+      <div class="agenda-row"><span class="num">02</span><span class="t">技术架构 — 用了哪些技术、怎么组织的</span><span class="d">~1min</span></div>
+      <div class="agenda-row"><span class="num">03</span><span class="t">系统设计 — 权限体系 + 数据库设计</span><span class="d">~1.5min</span></div>
+      <div class="agenda-row"><span class="num">04</span><span class="t">核心流程 — 选座购票 + 排期管理 + 审核流</span><span class="d">~2min</span></div>
+      <div class="agenda-row"><span class="num">05</span><span class="t">功能展示 — 三角色页面功能概览</span><span class="d">~1.5min</span></div>
+      <div class="agenda-row"><span class="num">06</span><span class="t">关键技术 — 锁座 / 排期冲突 / 缓存策略</span><span class="d">~1.5min</span></div>
+      <div class="agenda-row"><span class="num">07</span><span class="t">项目总结 + Q&amp;A</span><span class="d">~1.5min</span></div>
+    </div>
+    <aside class="notes">
+      <p>先看一下今天的议程，一共七个部分。</p>
+      <p>第一部分，快速过一下<strong>项目概述</strong>——这个系统到底做了什么，核心亮点有哪些。</p>
+      <p>第二部分，<strong>技术架构</strong>，讲我们用了哪些技术、整体架构怎么搭的。这块会比较快，因为后面会展开讲。</p>
+      <p>第三部分是<strong>系统设计</strong>，重点讲三件事：三角色权限怎么设计的、数据库 14 张表之间的关系、以及为什么要用冗余缓存。</p>
+      <p>第四部分，<strong>核心业务流程</strong>，这是今天最重要的部分。我会详细讲选座购票的完整流程、排期冲突怎么检测、以及审核工作流怎么运转。</p>
+      <p>第五部分快速展示一下<strong>前端页面</strong>——三种角色各自能看到什么。</p>
+      <p>第六部分挑几个<strong>关键技术点</strong>深入讲：锁座和超时释放机制、排期冲突的 SQL 检测、还有冗余缓存的性能优化思路。</p>
+      <p>最后总结 + 答疑。</p>
+      <p>好，进入第一部分。</p>
+    </aside>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 3 · 项目概述 -->
+  <!-- ============================================================ -->
+  <section class="slide" data-title="项目概述">
+    <p class="kicker">// part 01 · overview</p>
+    <h2 class="h2">一个<span class="accent">完整</span>的电影购票平台</h2>
+    <div class="grid g3 mt-l">
+      <div class="card card-accent">
+        <h4>🎬 用户端</h4>
+        <p class="dim">浏览 30 部真实电影、按类型/年代/地区筛选、查看预告片、收藏评分、在线选座购票、订单管理、自主注册注销。</p>
+      </div>
+      <div class="card card-accent">
+        <h4>🏢 影院端</h4>
+        <p class="dim">影院信息维护、影厅增删改查、排片管理（含冲突检测）、查看本影院订单。入驻需超级管理员审核。</p>
+      </div>
+      <div class="card card-accent">
+        <h4>🛡️ 管理端</h4>
+        <p class="dim">影院审核、电影 CRUD、全局排期审批、订单管理、ECharts 数据统计、系统公告发布、全平台账号管理。</p>
+      </div>
+    </div>
+    <div class="tag-row mt-m">
+      <span class="pill hl">3 种角色</span>
+      <span class="pill">14 张数据表</span>
+      <span class="pill">19 个前端页面</span>
+      <span class="pill">11 个后端模块</span>
+      <span class="pill">30 部真实电影</span>
+      <span class="pill">8×8 在线选座</span>
+    </div>
+    <aside class="notes">
+      <p>先给大家一个整体印象。我们这个系统，简单说就是一个<strong>完整的电影购票平台</strong>，覆盖了三类用户的所有核心需求。</p>
+      <p>左边这张卡是<strong>普通用户端</strong>。用户能做什么？浏览电影——我们数据库里预置了 30 部真实电影，海报是从 TMDB 获取的；可以按类型、年代、地区筛选；点进去看详情、看预告片、收藏、评分；最核心的是<strong>在线选座购票</strong>——8 乘 8 的座位图，点选座位、下单、支付，完整的购票流程。还有订单管理和自主注册注销。</p>
+      <p>中间是<strong>影院管理员端</strong>。影院工作人员可以管理影院信息、增删影厅、安排排片——这里有一个重要的冲突检测机制，同一影厅同一时间段不能重复排期。他们还可以查看自己影院的订单。不过影院管理员不是随便注册就能用的，需要<em>超级管理员审核通过</em>才行。</p>
+      <p>右边是<strong>超级管理员端</strong>，权限最高。审核影院入驻、管理所有电影、审批排期、看全平台订单、发布公告、管理账号，还有一个 ECharts 数据统计面板。</p>
+      <p>底下这些数字大家可以看一下：3 种角色、14 张表、19 个页面、11 个后端模块——规模不小，但架构很清晰。</p>
+    </aside>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 4 · 技术架构 -->
+  <!-- ============================================================ -->
+  <section class="slide" data-title="技术架构">
+    <p class="kicker">// part 02 · architecture</p>
+    <h2 class="h2">三层架构 · 前后端完全分离</h2>
+    <div class="arch anim-stagger-list mt-m" data-anim-target>
+      <div class="tier"><div class="tname">展示层<br>Presentation</div>
+        <div class="cells"><div class="cell"><div class="ic">🖥️</div><h4>Vue 3</h4><p>组合式 API</p></div>
+          <div class="cell"><div class="ic">📘</div><h4>TypeScript</h4><p>类型安全</p></div>
+          <div class="cell"><div class="ic">🧩</div><h4>Element Plus</h4><p>UI 组件库</p></div>
+          <div class="cell"><div class="ic">📦</div><h4>Vite + Pinia</h4><p>构建 + 状态管理</p></div>
+        </div>
+      </div>
+      <div class="tier hl"><div class="tname">业务层<br>Business</div>
+        <div class="cells"><div class="cell"><div class="ic">☕</div><h4>Spring Boot 3</h4><p>REST API</p></div>
+          <div class="cell"><div class="ic">🗄️</div><h4>MyBatis</h4><p>ORM 映射</p></div>
+          <div class="cell"><div class="ic">🔐</div><h4>JWT 认证</h4><p>无状态鉴权</p></div>
+          <div class="cell"><div class="ic">⏱️</div><h4>定时任务</h4><p>订单超时释放</p></div>
+        </div>
+      </div>
+      <div class="tier"><div class="tname">数据层<br>Data</div>
+        <div class="cells three"><div class="cell"><div class="ic">🐬</div><h4>MySQL 8.0</h4><p>14 张表</p></div>
+          <div class="cell"><div class="ic">🔗</div><h4>外键约束</h4><p>数据完整性</p></div>
+          <div class="cell"><div class="ic">⚡</div><h4>冗余缓存</h4><p>票房/评分预计算</p></div>
+        </div>
+      </div>
+    </div>
+    <p class="lede mt-m tc" style="font-size:15px;color:var(--text-3)">Vue 3 前端 ← <span class="mono">HTTP/REST + JSON + JWT</span> → Spring Boot 后端 ← <span class="mono">MyBatis</span> → MySQL 数据库</p>
+    <aside class="notes">
+      <p>这张图展示了我们的<strong>三层技术架构</strong>。</p>
+      <p>最上面是<strong>展示层</strong>，也就是前端。我们用了 Vue 3 的组合式 API，搭配 TypeScript 保证类型安全，UI 组件库是 Element Plus，构建工具是 Vite，状态管理用 Pinia。这一层的职责就是<em>把数据好看地呈现给用户</em>。</p>
+      <p>中间是<strong>业务层</strong>，也是核心。Spring Boot 3 提供 RESTful API，MyBatis 负责和数据库交互，JWT 做无状态认证——用户登录后拿一个 Token，之后每次请求都带着，后端不用存 Session。还有一个定时任务模块，专门扫描超时未支付的订单，自动释放座位。</p>
+      <p>最下面是<strong>数据层</strong>，MySQL 8.0，14 张表，全部用了外键约束保证数据完整性。还有一个关键设计——<em>冗余缓存</em>：电影表里直接存了票房总额和平均评分，不用每次查询都做聚合计算，性能提升很明显。</p>
+      <p>三层之间通信方式：前端和后端通过 HTTP REST 接口、JSON 格式、JWT Token 鉴权；后端和数据库通过 MyBatis 映射。真正做到了<strong>前后端完全分离</strong>，可以独立开发、独立部署。</p>
+    </aside>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 5 · 系统设计 -->
+  <!-- ============================================================ -->
+  <section class="slide" data-title="系统设计">
+    <p class="kicker">// part 03 · system design</p>
+    <h2 class="h2">三角色权限 + <span class="accent">14 张表</span>数据库设计</h2>
+    <div class="role-tiers">
+      <div class="role-tier" style="border-left:4px solid #bc8cff">
+        <div class="role-label">
+          <span class="role-icon">👑</span>
+          <span class="role-name">超级管理员</span>
+          <span class="role-sub">ADMIN</span>
+        </div>
+        <div class="role-abilities">
+          <span class="role-tag">审核影院入驻</span>
+          <span class="role-tag">管理电影信息</span>
+          <span class="role-tag">审批排期场次</span>
+          <span class="role-tag">ECharts 数据统计</span>
+          <span class="role-tag">系统公告管理</span>
+          <span class="role-tag">全平台账号管理</span>
+        </div>
+      </div>
+      <div class="role-tier" style="border-left:4px solid #f0883e">
+        <div class="role-label">
+          <span class="role-icon">🏢</span>
+          <span class="role-name">影院管理员</span>
+          <span class="role-sub">CINEMA_ADMIN</span>
+        </div>
+        <div class="role-abilities">
+          <span class="role-tag">影院信息维护</span>
+          <span class="role-tag">影厅增删改查</span>
+          <span class="role-tag">排片管理+冲突检测</span>
+          <span class="role-tag">查看本影院订单</span>
+          <span class="role-tag">需审核通过后使用</span>
+        </div>
+      </div>
+      <div class="role-tier" style="border-left:4px solid #3fb950">
+        <div class="role-label">
+          <span class="role-icon">👤</span>
+          <span class="role-name">普通用户</span>
+          <span class="role-sub">USER</span>
+        </div>
+        <div class="role-abilities">
+          <span class="role-tag">浏览电影+搜索筛选</span>
+          <span class="role-tag">8×8 在线选座购票</span>
+          <span class="role-tag">收藏电影+评分</span>
+          <span class="role-tag">查看我的订单</span>
+          <span class="role-tag">自主注册+注销账户</span>
+        </div>
+      </div>
+    </div>
+    <p class="lede mt-m" style="font-size:15px;color:var(--text-3)">权限实现：后端 <span class="mono">@RequireRole</span> 注解 + 拦截器 ｜ 前端 Vue Router 导航守卫 + <span class="mono">meta.roles</span></p>
+    <aside class="notes">
+      <p>系统设计这块，我重点讲两个维度：<strong>权限体系</strong>和<strong>数据库</strong>。</p>
+      <p>权限方面，我们设计了三种角色，层级非常清晰。最上面是<strong>超级管理员</strong>，紫色标识——能审核影院入驻、管理电影、审批排期、看全平台数据统计、发公告、管账号。中间是<strong>影院管理员</strong>，橙色——管理自己影院的信息、影厅、排片，看本影院订单。注意，影院管理员需要超级管理员审核通过后才能用，这是一个真实的业务审批流程。下面是<strong>普通用户</strong>，绿色——浏览电影、选座买票、收藏评分、看订单、自主注册注销。</p>
+      <p>权限怎么实现的呢？<em>前后端各有一层防护</em>。后端用自定义的 @RequireRole 注解加 AuthInterceptor 拦截器，声明式权限控制，哪个接口需要什么角色一目了然。前端用 Vue Router 的导航守卫，路由配置里写 meta.roles，进入页面前自动检查，角色不对直接跳转。两层防护，确保安全。</p>
+      <p>数据库方面，一共 14 张表，核心关系是这样的：超级管理员审核影院管理员，影院管理员管理影院、影厅、排期，排期关联电影，用户下单关联排期，订单展开到具体座位。电影和类型是多对多关系，通过中间表关联。还有一个设计亮点——电影表冗余缓存了票房和评分字段，避免每次查询做聚合。</p>
+    </aside>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 6 · 核心流程 — 选座购票 -->
+  <!-- ============================================================ -->
+  <section class="slide" data-title="核心流程">
+    <p class="kicker">// part 04 · core flow</p>
+    <h2 class="h2">选座购票 · 从浏览到取票的<span class="accent">完整闭环</span></h2>
+    <div class="steps anim-stagger-list" data-anim-target>
+      <div class="step"><div class="num">1</div><h4>浏览选场</h4><p>用户浏览电影详情，查看可选场次，选择时间合适的场次进入购票。</p><span class="tag">电影→场次</span></div>
+      <div class="step"><div class="num">2</div><h4>在线选座</h4><p>8×8 座位图展示实时状态：灰色已售、白色可选、蓝色已选。点击座位下单。</p><span class="tag">实时状态</span></div>
+      <div class="step"><div class="num">3</div><h4>锁座支付</h4><p>下单后座位<strong>锁定 10 分钟</strong>，订单状态"待支付"。超时自动释放座位。</p><span class="tag">锁座机制</span></div>
+      <div class="step"><div class="num">4</div><h4>取票完成</h4><p>支付后状态变"待取票"，用户到影院取票，订单完成。全流程可追踪。</p><span class="tag">订单追踪</span></div>
+    </div>
+    <div class="grid g2 mt-l">
+      <div class="card card-accent">
+        <h4>📅 排期管理流程</h4>
+        <p class="dim">影院管理员提交排期 → <strong>冲突检测</strong>（同影厅同时段不可重叠）→ 保存 → 等待超级管理员审核 → 审核通过后用户可购票。</p>
+      </div>
+      <div class="card card-accent">
+        <h4>✅ 审核工作流</h4>
+        <p class="dim">影院管理员注册 → 提交影院信息 → <strong>超级管理员审批</strong>（通过/驳回）→ 通过后绑定影院 ID，正式启用。场次排期同理需审核。</p>
+      </div>
+    </div>
+    <aside class="notes">
+      <p>这一页是今天的<strong>核心内容</strong>——业务流程。</p>
+      <p>先看上面四步，<strong>选座购票的完整闭环</strong>。第一步，用户浏览电影，选一个场次。第二步，进入 8×8 座位图，灰色是已售、白色可选、蓝色是你选中的——实时状态，不会出现两个人选同一个座位。第三步是最关键的——<strong>下单即锁座</strong>。你一提交订单，座位就被锁定 10 分钟。10 分钟内付款，订单正常流转；超时没付，后端定时任务自动取消订单、释放座位。这就解决了并发选座的问题。第四步，支付后去影院取票，流程结束。</p>
+      <p>左下角是<strong>排期管理流程</strong>。影院管理员提交排期的时候，系统会自动做冲突检测——查同一影厅在目标时间段有没有重叠的排期。SQL 条件是：新排期开始时间小于已有排期结束时间，且新排期结束时间大于已有排期开始时间。有冲突就报错，没冲突才保存。保存后还要等超级管理员审核通过，用户才能看到这个场次。</p>
+      <p>右下角是<strong>审核工作流</strong>。影院管理员不是注册就能用的——先注册、提交影院信息、等待审核，超级管理员审批通过后才绑定影院 ID、正式启用。排期也是同样的逻辑，提交后等审核。</p>
+      <p>这三个流程串起来，就是一个从管理到消费的完整业务闭环。</p>
+    </aside>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 7 · 功能模块展示 -->
+  <!-- ============================================================ -->
+  <section class="slide" data-title="功能模块">
+    <p class="kicker">// part 05 · features</p>
+    <h2 class="h2">19 个页面 · 按角色<span class="accent">清晰划分</span></h2>
+    <div class="grid g3 mt-l">
+      <div>
+        <h4 style="color:#3fb950;margin-bottom:14px">👤 普通用户 · 5 页面</h4>
+        <div class="card card-accent" style="margin-bottom:10px"><p class="dim" style="font-size:13px"><strong>用户首页</strong> — 热播推荐 / Top10 / 今日票房</p></div>
+        <div class="card card-accent" style="margin-bottom:10px"><p class="dim" style="font-size:13px"><strong>电影列表</strong> — 类型/年代/地区筛选 + 搜索</p></div>
+        <div class="card card-accent" style="margin-bottom:10px"><p class="dim" style="font-size:13px"><strong>电影详情</strong> — 海报 / 预告片 / 评分 / 收藏</p></div>
+        <div class="card card-accent" style="margin-bottom:10px"><p class="dim" style="font-size:13px"><strong>选座购票</strong> — 8×8 座位图 / 下单 / 支付</p></div>
+        <div class="card card-accent"><p class="dim" style="font-size:13px"><strong>我的订单</strong> — 查询 / 取消待支付订单</p></div>
+      </div>
+      <div>
+        <h4 style="color:#f0883e;margin-bottom:14px">🏢 影院管理员 · 5 页面</h4>
+        <div class="card card-accent" style="margin-bottom:10px"><p class="dim" style="font-size:13px"><strong>员工首页</strong> — 工作台概览</p></div>
+        <div class="card card-accent" style="margin-bottom:10px"><p class="dim" style="font-size:13px"><strong>影院管理</strong> — 基本信息维护</p></div>
+        <div class="card card-accent" style="margin-bottom:10px"><p class="dim" style="font-size:13px"><strong>影厅管理</strong> — 增删改 / 座位布局</p></div>
+        <div class="card card-accent" style="margin-bottom:10px"><p class="dim" style="font-size:13px"><strong>排片管理</strong> — 提交场次 / 冲突检测</p></div>
+        <div class="card card-accent"><p class="dim" style="font-size:13px"><strong>订单管理</strong> — 本影院订单查看</p></div>
+      </div>
+      <div>
+        <h4 style="color:#bc8cff;margin-bottom:14px">🛡️ 超级管理员 · 8 页面</h4>
+        <div class="card card-accent" style="margin-bottom:10px"><p class="dim" style="font-size:13px"><strong>管理首页</strong> — 后台概览</p></div>
+        <div class="card card-accent" style="margin-bottom:10px"><p class="dim" style="font-size:13px"><strong>数据统计</strong> — ECharts 图表面板</p></div>
+        <div class="card card-accent" style="margin-bottom:10px"><p class="dim" style="font-size:13px"><strong>影院审核</strong> — 入驻审批</p></div>
+        <div class="card card-accent" style="margin-bottom:10px"><p class="dim" style="font-size:13px"><strong>电影管理</strong> — CRUD / 类型 / 演职人员</p></div>
+        <div class="card card-accent" style="margin-bottom:10px"><p class="dim" style="font-size:13px"><strong>排片管理</strong> — 全局场次审批</p></div>
+        <div class="card card-accent" style="margin-bottom:10px"><p class="dim" style="font-size:13px"><strong>订单管理</strong> — 全部订单</p></div>
+        <div class="card card-accent" style="margin-bottom:10px"><p class="dim" style="font-size:13px"><strong>公告管理</strong> — 发布/管理系统公告</p></div>
+        <div class="card card-accent"><p class="dim" style="font-size:13px"><strong>账号管理</strong> — 全平台账号管理</p></div>
+      </div>
+    </div>
+    <aside class="notes">
+      <p>这页快速过一下前端页面。一共<strong>19 个页面</strong>，按三种角色分成三组。</p>
+      <p>左边绿色是<strong>普通用户</strong>的 5 个页面：首页有热播推荐和排行榜，电影列表支持多维度筛选，详情页能看预告片和评分，核心是选座购票页——8 乘 8 座位图，然后是订单管理。</p>
+      <p>中间橙色是<strong>影院管理员</strong>的 5 个页面：工作台、影院信息维护、影厅管理、排片管理——这里集成了冲突检测、还有订单查看。</p>
+      <p>右边紫色是<strong>超级管理员</strong>的 8 个页面，权限最全：数据统计用了 ECharts 画图，影院审核是一个审批工作流，电影管理支持完整的增删改查，排片管理是全局视角的审批，还有公告和账号管理。</p>
+      <p>页面虽然多，但<strong>路由结构很清晰</strong>——用户页面路径 /u，影院管理员 /staff，超级管理员 /admin。路由配置里通过 meta.roles 控制访问权限，导航守卫在进入页面前自动检查。</p>
+      <p>后端 API 同样按模块划分——认证、电影、场次、订单、影院管理、管理后台、数据统计，共 7 个 API 模块，RESTful 风格，统一 JSON 响应格式。</p>
+    </aside>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 8 · 关键技术实现 -->
+  <!-- ============================================================ -->
+  <section class="slide" data-title="关键技术">
+    <p class="kicker">// part 06 · key techniques</p>
+    <h2 class="h2">四个<span class="accent">关键技术点</span></h2>
+    <div class="stack mt-l">
+      <div class="rule-row">
+        <span class="num orange">01</span>
+        <div>
+          <b>🔐 JWT 无状态认证 + <span class="accent">双层权限控制</span></b>
+          <p class="dim">登录后签发 JWT Token 存 localStorage，每次请求 Header 携带。后端 <span class="mono">AuthInterceptor</span> 解析 Token → <span class="mono">@RequireRole</span> 注解声明式鉴权。前端 Vue Router <span class="mono">beforeEach</span> 导航守卫检查 <span class="mono">meta.roles</span>。公开页面（电影首页/详情）无需登录即可访问。</p>
+        </div>
+      </div>
+      <div class="rule-row">
+        <span class="num orange">02</span>
+        <div>
+          <b>💺 锁座 + <span class="accent">超时自动释放</span></b>
+          <p class="dim">下单时座位状态变为"已锁定"，订单记录 <span class="mono">lock_expire_time</span>（当前时间+10分钟）。后端定时任务（<span class="mono">@Scheduled</span>）每分钟扫描超时未支付订单，自动取消并释放座位。使用数据库事务保证原子性。</p>
+        </div>
+      </div>
+      <div class="rule-row">
+        <span class="num orange">03</span>
+        <div>
+          <b>📅 排期<span class="accent">冲突检测</span></b>
+          <p class="dim">新增/编辑排期时，SQL 查询同影厅时间段是否重叠：<span class="mono">start_time &lt; #{endTime} AND end_time &gt; #{startTime}</span>。存在重叠则返回错误，阻止保存。数据库层加唯一约束双重保障。</p>
+        </div>
+      </div>
+      <div class="rule-row">
+        <span class="num orange">04</span>
+        <div>
+          <b>⚡ <span class="accent">冗余缓存</span>策略</b>
+          <p class="dim">电影表冗余存储 <span class="mono">total_box_office</span>、<span class="mono">rating_avg</span>、<span class="mono">rating_count</span>。用户评分或订单完成时实时更新缓存字段。避免每次查询做聚合计算，以空间换时间，显著提升首页和列表页查询性能。</p>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      <p>技术实现这块，我挑四个最有代表性的点深入讲。</p>
+      <p><strong>第一个，JWT 认证加双层权限控制</strong>。用户登录后后端签发一个 JWT Token，前端存 localStorage，之后每次请求自动带在 Header 里。后端有个 AuthInterceptor 拦截器，拦截所有 /api 请求、解析 Token、把用户信息注入上下文。然后通过 @RequireRole 注解做声明式权限控制——比如某个接口加 @RequireRole("ADMIN")，就只有超级管理员能调。前端也有独立的一层：Vue Router 的 beforeEach 导航守卫，根据路由 meta.roles 配置检查当前用户角色，不匹配就跳转。两层防护，缺一不可。</p>
+      <p><strong>第二个，锁座和超时释放</strong>。这是购票系统最核心的并发问题。用户下单那一刻，座位就被标记为已锁定，订单记录一个 lock_expire_time——当前时间加 10 分钟。后端有个 @Scheduled 定时任务，每分钟扫一遍超时未支付的订单，自动取消、释放座位。整个过程在数据库事务里完成，保证原子性。</p>
+      <p><strong>第三个，排期冲突检测</strong>。SQL 条件就一行，但逻辑很精妙：新排期开始时间小于已有排期结束时间，且新排期结束时间大于已有排期开始时间——两个时间段有交集就是冲突。数据库还加了唯一约束做双重保障。</p>
+      <p><strong>第四个，冗余缓存</strong>。电影表里直接存了票房和评分，每次有人打分或买票就更新这个字段。代价是写操作多了一步更新，但读操作省了聚合计算——而读的频率远高于写，所以整体性能提升很明显。</p>
+    </aside>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 9 · 数据统计 -->
+  <!-- ============================================================ -->
+  <section class="slide" data-title="数据统计">
+    <p class="kicker">// part 07 · statistics</p>
+    <h2 class="h2">项目数据<span class="accent">一览</span></h2>
+    <div class="kpi-row">
+      <div class="kpi-item">
+        <div class="kpi-num">3</div>
+        <div class="kpi-label">用户角色</div>
+      </div>
+      <div class="kpi-item">
+        <div class="kpi-num">14</div>
+        <div class="kpi-label">数据库表</div>
+      </div>
+      <div class="kpi-item">
+        <div class="kpi-num">19</div>
+        <div class="kpi-label">前端页面</div>
+      </div>
+      <div class="kpi-item">
+        <div class="kpi-num">30</div>
+        <div class="kpi-label">预置电影</div>
+      </div>
+    </div>
+    <div class="grid g2 mt-l">
+      <div class="card card-accent">
+        <h4>📊 ECharts 数据可视化</h4>
+        <p class="dim">超级管理员后台集成三类图表：<strong>近 7 日票房折线图</strong>展示趋势、<strong>电影类型分布饼图</strong>看类型占比、<strong>影院票房柱状图</strong>对比各影院表现。数据实时从数据库聚合查询。</p>
+      </div>
+      <div class="card card-accent">
+        <h4>🖼️ 真实电影海报</h4>
+        <p class="dim">通过 <strong>TMDB API</strong> 获取 30 部真实电影的高清海报 URL。前端 <span class="mono">MoviePoster</span> 组件实现加载失败 fallback 机制——网络异常或图片失效时自动显示默认占位图，保证界面完整性。</p>
+      </div>
+    </div>
+    <div class="grid g3 mt-m">
+      <div class="card card-accent">
+        <h4 style="font-size:14px">后端技术</h4>
+        <p class="dim" style="font-size:12px">Spring Boot 3.3.5<br>MyBatis 3.0.3<br>Hutool + Lombok<br>Maven 构建</p>
+      </div>
+      <div class="card card-accent">
+        <h4 style="font-size:14px">前端技术</h4>
+        <p class="dim" style="font-size:12px">Vue 3.4 + TS 5.3<br>Element Plus 2.7<br>Tailwind CSS 3.4<br>Vite + Pinia + ECharts</p>
+      </div>
+      <div class="card card-accent">
+        <h4 style="font-size:14px">开发环境</h4>
+        <p class="dim" style="font-size:12px">JDK ≥ 17<br>Node.js ≥ 18<br>Maven ≥ 3.8<br>MySQL 8.0</p>
+      </div>
+    </div>
+    <aside class="notes">
+      <p>这页是<strong>项目数据总览</strong>，让大家对我们的工作量有一个直观感受。</p>
+      <p>上面四个大数字：3 种角色、14 张数据库表、19 个前端页面、30 部预置电影。这些数据背后是实实在在的代码量——整个项目 Java 后端约占 62%，Vue 前端约占 37%，配置和 SQL 占 1%。</p>
+      <p>左下角说一下<strong>ECharts 数据可视化</strong>。超级管理员后台有一个专门的数据统计页面，集成了三类图表：近 7 日票房折线图看趋势、电影类型饼图看分布、影院票房柱状图做对比。这些数据都是从数据库实时聚合查询的，不是静态写死的。</p>
+      <p>右下角是<strong>真实电影海报</strong>。我们通过 TMDB 这个公开电影数据库获取了 30 部真实电影的高清海报 URL，前端做了一个 MoviePoster 组件，加载失败会自动 fallback 到默认占位图——这样即使网络出问题，界面也不会崩。</p>
+      <p>底部三张卡是完整的技术栈和开发环境要求，大家一看就清楚了。</p>
+      <p>好，最后一页，总结一下。</p>
+    </aside>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SLIDE 10 · 总结 + 致谢 -->
+  <!-- ============================================================ -->
+  <section class="slide" data-title="总结">
+    <p class="kicker">// closing · summary</p>
+    <h2 class="h2">项目总结 &amp; <span class="accent">展望</span></h2>
+    <div class="grid g2 mt-l">
+      <div>
+        <h4 class="green" style="font-size:18px;margin-bottom:12px">✅ 已完成功能</h4>
+        <ul class="check-list">
+          <li>三角色完整权限体系（前后端双层防护）</li>
+          <li>电影浏览 / 搜索 / 详情 / 预告片 / 真实海报</li>
+          <li>8×8 在线选座购票（锁座 + 超时释放）</li>
+          <li>订单全生命周期管理</li>
+          <li>影院入驻审核 + 排期审批工作流</li>
+          <li>排期冲突自动检测</li>
+          <li>ECharts 数据统计可视化</li>
+          <li>系统公告 + 账号管理</li>
+          <li>收藏评分 + 用户注册注销</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="orange" style="font-size:18px;margin-bottom:12px">🔮 可扩展方向</h4>
+        <div class="card card-accent" style="margin-bottom:10px"><p class="dim" style="font-size:13px"><strong>接入真实支付</strong> — 微信支付 / 支付宝接口对接</p></div>
+        <div class="card card-accent" style="margin-bottom:10px"><p class="dim" style="font-size:13px"><strong>灵活座位布局</strong> — 支持非 8×8 自定义座位图</p></div>
+        <div class="card card-accent" style="margin-bottom:10px"><p class="dim" style="font-size:13px"><strong>智能推荐</strong> — 基于用户行为的电影推荐算法</p></div>
+        <div class="card card-accent" style="margin-bottom:10px"><p class="dim" style="font-size:13px"><strong>消息通知</strong> — 站内信 / 邮件 / 短信提醒</p></div>
+        <div class="card card-accent"><p class="dim" style="font-size:13px"><strong>评论回复</strong> — 用户间互动评论功能</p></div>
+      </div>
+    </div>
+    <p class="lede mt-l tc" style="font-size:22px;font-weight:600">感谢各位老师！欢迎提问 <span style="color:var(--accent)">🙋</span></p>
+    <div class="deck-footer">
+      <span class="mono">#thanks · Q&amp;A</span>
+      <span class="slide-number" data-current="10" data-total="10"></span>
+    </div>
+    <aside class="notes">
+      <p>最后一页，做一个总结。</p>
+      <p>左边是<strong>已完成的功能</strong>，一共九大项。从三角色权限体系，到电影浏览搜索、在线选座购票、订单管理、审核工作流、排期冲突检测、数据可视化、公告账号管理，再到收藏评分和用户注册注销——<strong>一个电影购票平台该有的核心功能，我们基本都覆盖了</strong>。</p>
+      <p>项目有几个突出特色：前后端完全分离，可以独立开发独立部署；审核工作流模拟了真实业务场景，不是简单的增删改查；排期冲突检测和锁座超时释放这两个机制解决了实际业务中的并发和数据一致性问题；冗余缓存策略体现了性能优化的意识；真实电影海报提升了用户体验。</p>
+      <p>右边是<strong>可扩展方向</strong>，也是这个项目未来可以继续完善的地方。最直接的就是接入微信支付或支付宝，把模拟支付变成真实支付；座位图可以做得更灵活，不限于 8 乘 8；可以加推荐算法；加消息通知系统；加用户评论回复功能。这些都是锦上添花的方向。</p>
+      <p>总的来说，这个项目完整实现了一个电影购票系统的核心业务闭环，技术栈主流、架构清晰、代码规范。对我来说，通过这个项目深入理解了前后端分离开发的全流程，也锻炼了系统设计的能力。</p>
+      <p>我的汇报就到这里，<strong>感谢各位老师，欢迎提问</strong>！</p>
+    </aside>
+  </section>
+
+</div>
+
+<div style="position:fixed;bottom:12px;left:12px;font-size:11px;color:#484f5866;z-index:100;pointer-events:none">
+  S 演讲者视图 · T 切换主题 · ← → 翻页 · F 全屏 · O 总览 · R 重置计时
+</div>
+
+<script src="file:///C:/Users/DFWJ/.agents/skills/html-ppt-skill/html-ppt-skill/assets/runtime.js"></script>
+</body>
+</html>

@@ -5,6 +5,7 @@ import { httpGet } from '@/api/client'
 import { useRouter } from 'vue-router'
 
 type Cinema = { id: number; name: string }
+type MovieType = { id: number; name: string }
 type Movie = { id: number; name: string; posterUrl?: string; status?: number; totalBoxOffice?: number; ratingAvg?: number }
 
 const router = useRouter()
@@ -14,6 +15,22 @@ const cinemaId = ref<number | null>(null)
 const keyword = ref('')
 const loading = ref(false)
 const movies = ref<Movie[]>([])
+
+// 筛选条件
+const types = ref<MovieType[]>([])
+const selectedTypeId = ref<number | null>(null)
+const selectedYear = ref<number | null>(null)
+const selectedRegion = ref<string | null>(null)
+
+// 年份选项（2005-2024）
+const yearOptions = Array.from({ length: 20 }, (_, i) => 2005 + i)
+
+// 区域选项
+const regionOptions = [
+  '中国大陆', '中国台湾', '美国', '英国', '法国', '俄罗斯', '中国香港',
+  '中国澳门', '泰国', '韩国', '日本', '印度', '意大利', '西班牙', '德国',
+  '波兰', '其他'
+]
 
 const canOpen = computed(() => !!cinemaId.value)
 
@@ -36,11 +53,23 @@ async function loadCinemas() {
   }
 }
 
+async function loadTypes() {
+  try {
+    types.value = await httpGet<MovieType[]>('/api/movies/types')
+  } catch {
+  }
+}
+
 async function loadMovies() {
   loading.value = true
   try {
     movies.value = await httpGet<Movie[]>('/api/movies', {
-      params: { keyword: keyword.value || undefined },
+      params: {
+        keyword: keyword.value || undefined,
+        typeId: selectedTypeId.value || undefined,
+        year: selectedYear.value || undefined,
+        region: selectedRegion.value || undefined,
+      },
     })
   } catch (e: any) {
     ElMessage.error(e?.message || '加载失败')
@@ -49,11 +78,20 @@ async function loadMovies() {
   }
 }
 
+function resetFilters() {
+  selectedTypeId.value = null
+  selectedYear.value = null
+  selectedRegion.value = null
+  keyword.value = ''
+  loadMovies()
+}
+
 function goDetail(movieId: number) {
   router.push(`/u/movie/${movieId}`)
 }
 
 loadCinemas()
+loadTypes()
 loadMovies()
 </script>
 
@@ -65,6 +103,79 @@ loadMovies()
       </el-select>
       <el-input v-model="keyword" placeholder="搜索影片" style="width: 260px" @keyup.enter="loadMovies" />
       <el-button type="primary" :loading="loading" @click="loadMovies">查询</el-button>
+      <el-button @click="resetFilters">重置</el-button>
+    </div>
+  </el-card>
+
+  <!-- 筛选区域 -->
+  <el-card shadow="never" class="mt-3">
+    <!-- 类型 -->
+    <div class="filter-row">
+      <span class="filter-label">类型:</span>
+      <div class="filter-options">
+        <el-button
+          :type="selectedTypeId === null ? 'primary' : ''"
+          size="small"
+          @click="selectedTypeId = null; loadMovies()"
+        >
+          全部
+        </el-button>
+        <el-button
+          v-for="t in types"
+          :key="t.id"
+          :type="selectedTypeId === t.id ? 'primary' : ''"
+          size="small"
+          @click="selectedTypeId = t.id; loadMovies()"
+        >
+          {{ t.name }}
+        </el-button>
+      </div>
+    </div>
+
+    <!-- 年份 -->
+    <div class="filter-row">
+      <span class="filter-label">年代:</span>
+      <div class="filter-options">
+        <el-button
+          :type="selectedYear === null ? 'primary' : ''"
+          size="small"
+          @click="selectedYear = null; loadMovies()"
+        >
+          全部
+        </el-button>
+        <el-button
+          v-for="y in yearOptions.slice().reverse()"
+          :key="y"
+          :type="selectedYear === y ? 'primary' : ''"
+          size="small"
+          @click="selectedYear = y; loadMovies()"
+        >
+          {{ y }}
+        </el-button>
+      </div>
+    </div>
+
+    <!-- 区域 -->
+    <div class="filter-row">
+      <span class="filter-label">区域:</span>
+      <div class="filter-options">
+        <el-button
+          :type="selectedRegion === null ? 'primary' : ''"
+          size="small"
+          @click="selectedRegion = null; loadMovies()"
+        >
+          全部
+        </el-button>
+        <el-button
+          v-for="r in regionOptions"
+          :key="r"
+          :type="selectedRegion === r ? 'primary' : ''"
+          size="small"
+          @click="selectedRegion = r; loadMovies()"
+        >
+          {{ r }}
+        </el-button>
+      </div>
     </div>
   </el-card>
 
@@ -200,5 +311,30 @@ loadMovies()
 
 :deep(.el-button) {
   border-radius: 6px;
+}
+
+.filter-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.filter-row:last-child {
+  margin-bottom: 0;
+}
+
+.filter-label {
+  flex-shrink: 0;
+  font-size: 14px;
+  color: #666;
+  width: 40px;
+  line-height: 28px;
+}
+
+.filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 </style>

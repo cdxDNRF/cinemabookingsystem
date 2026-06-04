@@ -23,7 +23,7 @@ public interface MovieUserActionMapper {
   @Select("select * from t_movie_user_action where user_id=#{userId} and is_favorite=1 order by favorite_time desc")
   List<MovieUserAction> listFavorites(Long userId);
 
-  @Select("select a.*, u.username as userName from t_movie_user_action a left join t_user u on a.user_id = u.id where a.movie_id=#{movieId} and a.score is not null order by a.score_time desc")
+  @Select("select a.*, COALESCE(NULLIF(u.nickname, ''), u.username) as userName from t_movie_user_action a left join t_user u on a.user_id = u.id where a.movie_id=#{movieId} and a.score is not null order by a.score_time desc")
   List<MovieUserAction> listComments(Long movieId);
 
   @Select("select ifnull(avg(score),0) as avgScore, count(score) as cnt from t_movie_user_action where movie_id=#{movieId} and score is not null")

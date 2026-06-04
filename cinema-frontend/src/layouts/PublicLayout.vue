@@ -26,6 +26,7 @@ function onLogout() {
         <nav class="flex items-center gap-6">
           <router-link to="/u" class="text-sm text-slate-600 hover:text-blue-600">首页</router-link>
           <router-link to="/u/movies" class="text-sm text-slate-600 hover:text-blue-600">影片</router-link>
+          <router-link to="/u/rankings" class="text-sm text-slate-600 hover:text-blue-600">排行榜</router-link>
         </nav>
 
         <div class="flex items-center gap-3">

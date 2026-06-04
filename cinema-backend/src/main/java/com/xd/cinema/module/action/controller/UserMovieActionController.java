@@ -55,22 +55,16 @@ public class UserMovieActionController {
       throw new BizException(400, "评分范围1-10");
     }
     Long userId = UserContext.get().getId();
-    MovieUserAction action = actionMapper.find(userId, movieId);
-    if (action == null) {
-      action = new MovieUserAction();
-      action.setUserId(userId);
-      action.setMovieId(movieId);
-      action.setIsFavorite(0);
-      action.setScore(body.score);
-      action.setScoreTime(LocalDateTime.now());
-      action.setContent(body.content);
-      actionMapper.insert(action);
-    } else {
-      action.setScore(body.score);
-      action.setScoreTime(LocalDateTime.now());
-      action.setContent(body.content);
-      actionMapper.update(action);
-    }
+    // 每次评论都新增记录，不覆盖旧评论
+    MovieUserAction action = new MovieUserAction();
+    action.setUserId(userId);
+    action.setMovieId(movieId);
+    action.setIsFavorite(0);
+    action.setScore(body.score);
+    action.setScoreTime(LocalDateTime.now());
+    action.setContent(body.content);
+    actionMapper.insert(action);
+
     MovieUserActionMapper.RatingRow row = actionMapper.calcRating(movieId);
     BigDecimal avg = row == null || row.avgScore == null ? BigDecimal.ZERO : row.avgScore;
     int cnt = row == null || row.cnt == null ? 0 : row.cnt;

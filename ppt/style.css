@@ -1,0 +1,360 @@
+/* tpl-presenter-mode-reveal · scoped styles
+ * Cinema Booking System project report deck.
+ * Inherits tokens from active theme.
+ */
+
+.tpl-presenter-mode-reveal .slide {
+  padding: 72px 96px;
+}
+
+.tpl-presenter-mode-reveal .kicker {
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  color: var(--text-3);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: 0 0 18px 0;
+}
+
+.tpl-presenter-mode-reveal .h1 {
+  font-size: clamp(44px, 5.6vw, 76px);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  margin: 0 0 24px 0;
+}
+
+.tpl-presenter-mode-reveal .h2 {
+  font-size: clamp(32px, 3.6vw, 48px);
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  margin: 0 0 28px 0;
+}
+
+.tpl-presenter-mode-reveal .h3 {
+  font-size: clamp(24px, 2.4vw, 32px);
+  line-height: 1.3;
+  margin: 0 0 16px 0;
+  color: var(--text-1);
+}
+
+.tpl-presenter-mode-reveal .lede {
+  font-size: 20px;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+
+.tpl-presenter-mode-reveal .mono {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.9em;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.08);
+  color: var(--accent, #58a6ff);
+}
+
+.tpl-presenter-mode-reveal .accent {
+  color: var(--accent, #f0883e);
+  font-weight: 700;
+}
+
+.tpl-presenter-mode-reveal .speaker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 32px;
+}
+.tpl-presenter-mode-reveal .speaker .av {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent, #58a6ff), #bc8cff);
+}
+.tpl-presenter-mode-reveal .speaker b {
+  display: block;
+  font-size: 16px;
+}
+.tpl-presenter-mode-reveal .speaker span {
+  font-size: 13px;
+  color: var(--text-3);
+}
+
+/* Agenda rows */
+.tpl-presenter-mode-reveal .agenda-row {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 18px;
+  border: 1px solid var(--border, rgba(255,255,255,0.1));
+  border-radius: 10px;
+  margin-bottom: 10px;
+  background: var(--surface, rgba(255,255,255,0.03));
+}
+.tpl-presenter-mode-reveal .agenda-row .num {
+  font-family: var(--font-mono, monospace);
+  font-size: 14px;
+  color: var(--accent, #58a6ff);
+  font-weight: 700;
+}
+.tpl-presenter-mode-reveal .agenda-row .t {
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--text-1);
+}
+.tpl-presenter-mode-reveal .agenda-row .d {
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+/* Cards */
+.tpl-presenter-mode-reveal .card {
+  background: var(--surface, rgba(255,255,255,0.03));
+  border: 1px solid var(--border, rgba(255,255,255,0.1));
+  border-radius: 12px;
+  padding: 22px 24px;
+}
+.tpl-presenter-mode-reveal .card-accent {
+  border-top: 3px solid var(--accent, #58a6ff);
+}
+.tpl-presenter-mode-reveal .card h4 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  color: var(--text-1);
+}
+.tpl-presenter-mode-reveal .card .dim {
+  color: var(--text-2);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Feature rows */
+.tpl-presenter-mode-reveal .feature-row {
+  display: flex;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border, rgba(255,255,255,0.08));
+}
+.tpl-presenter-mode-reveal .feature-row:last-child { border-bottom: none; }
+.tpl-presenter-mode-reveal .feature-row .num {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.tpl-presenter-mode-reveal .feature-row b {
+  display: block;
+  font-size: 17px;
+  margin-bottom: 4px;
+  color: var(--text-1);
+}
+.tpl-presenter-mode-reveal .feature-row .dim {
+  font-size: 14px;
+  color: var(--text-2);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Rule rows (3 铁律) */
+.tpl-presenter-mode-reveal .rule-row {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 20px;
+  align-items: start;
+  padding: 18px 22px;
+  border: 1px solid var(--border, rgba(255,255,255,0.1));
+  border-radius: 12px;
+  margin-bottom: 14px;
+  background: var(--surface, rgba(255,255,255,0.03));
+}
+.tpl-presenter-mode-reveal .rule-row .num {
+  font-size: 28px;
+  font-weight: 800;
+  font-family: var(--font-mono, monospace);
+  line-height: 1;
+}
+.tpl-presenter-mode-reveal .rule-row b {
+  display: block;
+  font-size: 18px;
+  margin-bottom: 6px;
+  color: var(--text-1);
+}
+.tpl-presenter-mode-reveal .rule-row .dim {
+  font-size: 15px;
+  color: var(--text-2);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Code block */
+.tpl-presenter-mode-reveal .code-block {
+  background: #0d1117;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 20px 26px;
+  font-family: var(--font-mono, "SF Mono", monospace);
+  font-size: 15px;
+  line-height: 1.8;
+  color: #e6edf3;
+  white-space: pre-wrap;
+  text-align: left;
+}
+.tpl-presenter-mode-reveal .code-block .comment { color: #8b949e; }
+.tpl-presenter-mode-reveal .code-block .cmd { color: #3fb950; font-weight: 600; }
+.tpl-presenter-mode-reveal .code-block .flag { color: #f0883e; }
+
+/* Stack helper */
+.tpl-presenter-mode-reveal .stack > * + * { margin-top: 0; }
+
+/* Grid helpers */
+.tpl-presenter-mode-reveal .grid { display: grid; gap: 20px; }
+.tpl-presenter-mode-reveal .grid.g2 { grid-template-columns: 1fr 1fr; }
+.tpl-presenter-mode-reveal .grid.g3 { grid-template-columns: repeat(3, 1fr); }
+.tpl-presenter-mode-reveal .grid.g4 { grid-template-columns: repeat(4, 1fr); }
+
+.tpl-presenter-mode-reveal .mt-m { margin-top: 20px; }
+.tpl-presenter-mode-reveal .mt-l { margin-top: 32px; }
+.tpl-presenter-mode-reveal .mt-s { margin-top: 10px; }
+.tpl-presenter-mode-reveal .tc { text-align: center; }
+
+/* Color tokens */
+.tpl-presenter-mode-reveal .blue { color: #58a6ff; }
+.tpl-presenter-mode-reveal .green { color: #3fb950; }
+.tpl-presenter-mode-reveal .orange { color: #f0883e; }
+.tpl-presenter-mode-reveal .purple { color: #bc8cff; }
+.tpl-presenter-mode-reveal .red { color: #f85149; }
+.tpl-presenter-mode-reveal .yellow { color: #e3b341; }
+.tpl-presenter-mode-reveal .cyan { color: #39d2c0; }
+
+/* ============ Architecture diagram (tier layout) ============ */
+.tpl-presenter-mode-reveal .arch { margin-top: 20px; display: grid; grid-template-rows: auto auto auto; gap: 22px; }
+.tpl-presenter-mode-reveal .arch .tier { display: grid; grid-template-columns: 130px 1fr; align-items: stretch; gap: 22px; }
+.tpl-presenter-mode-reveal .arch .tname {
+  display: flex; align-items: center; justify-content: center;
+  background: var(--surface-2); border-radius: var(--radius);
+  padding: 18px; font-weight: 600; font-size: 13px;
+  color: var(--text-2); text-transform: uppercase;
+  letter-spacing: .1em; text-align: center;
+}
+.tpl-presenter-mode-reveal .arch .cells { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.tpl-presenter-mode-reveal .arch .cells.three { grid-template-columns: repeat(3, 1fr); }
+.tpl-presenter-mode-reveal .arch .cell {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px;
+  text-align: center; box-shadow: var(--shadow);
+}
+.tpl-presenter-mode-reveal .arch .cell .ic { font-size: 24px; }
+.tpl-presenter-mode-reveal .arch .cell h4 { font-size: 14px; margin: 6px 0 2px; }
+.tpl-presenter-mode-reveal .arch .cell p { font-size: 11px; color: var(--text-3); margin: 0; }
+.tpl-presenter-mode-reveal .arch .tier.hl .cell { border-top: 3px solid var(--accent); }
+
+/* ============ Process steps (4-step) ============ */
+.tpl-presenter-mode-reveal .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 24px; }
+.tpl-presenter-mode-reveal .step {
+  position: relative; padding: 24px 26px;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); box-shadow: var(--shadow);
+}
+.tpl-presenter-mode-reveal .step .num {
+  position: absolute; top: -24px; left: 22px;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--accent); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 20px; box-shadow: var(--shadow);
+}
+.tpl-presenter-mode-reveal .step h4 { margin: 18px 0 8px; font-size: 17px; }
+.tpl-presenter-mode-reveal .step p { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+.tpl-presenter-mode-reveal .step .tag {
+  display: inline-block; margin-top: 10px; font-size: 11px;
+  padding: 3px 10px; border-radius: 999px;
+  background: var(--surface-2); color: var(--text-3);
+}
+
+/* ============ Role tier layout ============ */
+.tpl-presenter-mode-reveal .role-tiers { display: grid; gap: 16px; margin-top: 20px; }
+.tpl-presenter-mode-reveal .role-tier {
+  display: grid; grid-template-columns: 180px 1fr; gap: 18px;
+  padding: 20px; border: 1px solid var(--border);
+  border-radius: 12px; background: var(--surface);
+  align-items: center;
+}
+.tpl-presenter-mode-reveal .role-tier .role-label {
+  text-align: center;
+}
+.tpl-presenter-mode-reveal .role-tier .role-label .role-icon {
+  font-size: 32px; display: block; margin-bottom: 6px;
+}
+.tpl-presenter-mode-reveal .role-tier .role-label .role-name {
+  font-size: 16px; font-weight: 700; color: var(--text-1);
+}
+.tpl-presenter-mode-reveal .role-tier .role-label .role-sub {
+  font-size: 12px; color: var(--text-3); margin-top: 2px;
+}
+.tpl-presenter-mode-reveal .role-tier .role-abilities {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.tpl-presenter-mode-reveal .role-tier .role-tag {
+  font-size: 13px; padding: 6px 14px; border-radius: 8px;
+  background: var(--surface-2); color: var(--text-2);
+  white-space: nowrap;
+}
+
+/* ============ KPI big-number row ============ */
+.tpl-presenter-mode-reveal .kpi-row {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+  margin: 32px 0;
+}
+.tpl-presenter-mode-reveal .kpi-item {
+  text-align: center;
+  padding: 28px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+.tpl-presenter-mode-reveal .kpi-item .kpi-num {
+  font-size: 56px; font-weight: 900;
+  line-height: 1.1;
+  background: var(--grad);
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+}
+.tpl-presenter-mode-reveal .kpi-item .kpi-label {
+  font-size: 14px; color: var(--text-3); margin-top: 6px;
+}
+
+/* ============ Tags / pills ============ */
+.tpl-presenter-mode-reveal .tag-row {
+  display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px;
+}
+.tpl-presenter-mode-reveal .pill {
+  font-size: 13px; padding: 6px 16px; border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text-2);
+}
+.tpl-presenter-mode-reveal .pill.hl {
+  border-color: var(--accent); color: var(--accent);
+  font-weight: 600;
+}
+
+/* ============ Check / star list ============ */
+.tpl-presenter-mode-reveal .check-list {
+  list-style: none; padding: 0; margin: 16px 0;
+}
+.tpl-presenter-mode-reveal .check-list li {
+  padding: 8px 0; font-size: 15px; color: var(--text-1);
+  display: flex; align-items: center; gap: 10px;
+}
+.tpl-presenter-mode-reveal .check-list li::before {
+  content: "✓"; color: var(--good, #3fb950);
+  font-weight: 700; font-size: 18px;
+}
+
+/* ============ Next-step arrow row ============ */
+.tpl-presenter-mode-reveal .flow-arrow {
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px; margin: 8px 0;
+}
+.tpl-presenter-mode-reveal .flow-arrow .arrow {
+  font-size: 22px; color: var(--text-3);
+}

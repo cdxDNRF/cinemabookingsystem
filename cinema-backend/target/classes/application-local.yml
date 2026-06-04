@@ -6,5 +6,4 @@ spring:
 
 cinema:
   jwt:
-    secret: cdx548205644
-
+    secret: cinema-jwt-secret-key-2024
